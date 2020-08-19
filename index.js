@@ -85,7 +85,6 @@ canvas.addEventListener("touchstart", function (e) {
         .toString(16)
         .slice(1);
     colour = hex;
-    // console.log(colour);
   }
   canvas.style.overflow = "hidden";
 
@@ -193,7 +192,6 @@ function erase(x, y) {
 }
 function rectDraw(sx, sy, x, y) {
   ctx.fillStyle = colour;
-
   ctx.fillRect(sx, sy, x - sx, y - sy);
 }
 
@@ -202,7 +200,6 @@ function circleDraw(sx, sy, mx, my) {
   x = mx - sx;
   y = my - sy;
   rad = Math.sqrt(x * x + y * y);
-  console.log(rad);
   ctx.beginPath();
   ctx.arc(sx, sy, rad, 0, Math.PI * 2, false);
   ctx.closePath();
