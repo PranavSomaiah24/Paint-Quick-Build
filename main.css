@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+}
+.top {
+  background: linear-gradient(white, grey 80%);
+  color: black;
+  text-align: left;
+  padding: 0 0 4em 1em;
+  font-weight: bold;
+}
+header {
+  padding-top: 1em;
+}
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.9rem;
+}
+p {
+  margin: 0;
+}
+.canvasContent {
+  height: 110vh;
+  /* border: 1px solid black; */
+  background-color: grey;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+.paintContent {
+  height: 100vh;
+  /* padding-left: 1%; */
+  /* padding-right: 1%; */
+  margin: 0;
+  background-color: grey;
+}
+#line {
+  top: 40%;
+  left: 5%;
+  padding: 0.5em;
+  width: 15%;
+  border-radius: 0.5em;
+  outline: none;
+  border: none;
+  background-color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+}
+#rect {
+  top: 60%;
+  left: 5%;
+  padding: 0.5em;
+  width: 15%;
+  border-radius: 0.5em;
+  outline: none;
+  border: none;
+  background-color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+}
+#erase {
+  top: 40%;
+  right: 5%;
+  padding: 0.5em;
+  width: 15%;
+  border-radius: 0.5em;
+  outline: none;
+  border: none;
+  background-color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+}
+#clear {
+  top: 80%;
+  left: 5%;
+  padding: 0.5em;
+  width: 15%;
+  border-radius: 0.5em;
+  outline: none;
+  border: none;
+  background-color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+}
+#myCanvas {
+  border: 1px solid black;
+  background-color: white;
+}
