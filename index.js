@@ -116,7 +116,7 @@ canvas.addEventListener("mousedown", () => {
     ctx.fillStyle = colour;
     ctx.strokeStyle = colour;
     ctx.beginPath();
-    ctx.arc(645, 544, 16, 0, Math.PI * 2, false);
+    ctx.arc(canvas.width - 55, canvas.height - 56, 16, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.fill();
   }
