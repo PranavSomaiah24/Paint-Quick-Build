@@ -136,19 +136,39 @@ p {
   width: 17%;
 }
 @media (max-width: 930px) {
+  #line {
+    top: 15%;
+  }
+  #rect {
+    top: 15%;
+    left: 25%;
+  }
+  #circle {
+    top: 15%;
+    left: 47%;
+  }
+  #erase {
+    top: 15%;
+    left: 68%;
+  }
+  #clear {
+    top: 15%;
+    left: 87%;
+  }
+
   #line,
   #clear,
   #rect,
   #circle,
   #erase {
-    width: 2%;
+    width: 10%;
     height: 7%;
     color: transparent;
   }
   #myCanvas {
-    width: 300px;
-    height: 500px;
-    margin-top: 2em;
+    width: 350px;
+    height: 400px;
+    margin-top: 5em;
   }
   .top {
     text-align: center;

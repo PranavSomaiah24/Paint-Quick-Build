@@ -5,6 +5,10 @@ let startX,
   startY,
   stopX,
   stopY,
+  touchX,
+  touchY,
+  touchStartX,
+  touchStartY,
   rgb,
   hex,
   colour = "black";
@@ -12,6 +16,11 @@ let startX,
 let img = new Image();
 img.src = "color-wheel-12-colors.png";
 let savedState;
+
+function init() {
+  (canvas = document.getElementById("myCanvas")),
+    (ctx = canvas.getContext("2d"));
+}
 
 function init() {
   (canvas = document.getElementById("myCanvas")),
@@ -25,6 +34,64 @@ function init() {
 
 init();
 
+canvas.addEventListener("touchmove", function (e) {
+  const rect = canvas.getBoundingClientRect();
+  var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+  var touch = evt.touches[0] || evt.changedTouches[0];
+  touchX = touch.pageX - rect.left;
+  touchY = touch.pageY - rect.top;
+  e.preventDefault();
+  if (touchX < canvas.width - 130 || touchY < canvas.height - 130) {
+    if (isDrawing) {
+      switch (drawType) {
+        case 0:
+          erase(touchX, touchY);
+          break;
+        case 1:
+          lineDraw(touchX, touchY);
+          break;
+        case 3:
+          ctx.putImageData(savedState, 0, 0);
+          rectDraw(touchStartX, touchStartY, touchX, touchY);
+          break;
+        case 4:
+          ctx.putImageData(savedState, 0, 0);
+          circleDraw(touchStartX, touchStartY, touchX, touchY);
+          break;
+      }
+    }
+  }
+});
+
+canvas.addEventListener("touchstart", function (e) {
+  if (drawType == 3 || drawType == 4) {
+    savedState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  }
+
+  if (!isDrawing) {
+    const rect = canvas.getBoundingClientRect();
+    var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+    var touch = evt.touches[0] || evt.changedTouches[0];
+    touchStartX = touch.pageX - rect.left;
+    touchStartY = touch.pageY - rect.top;
+    // console.log(touchStartY);
+  }
+
+  if (touchStartX > 250 && touchStartY > 300) {
+    rgb = ctx.getImageData(touchStartX, touchStartY, 1, 1).data;
+    hex =
+      "#" +
+      ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2])
+        .toString(16)
+        .slice(1);
+    colour = hex;
+    // console.log(colour);
+  }
+  canvas.style.overflow = "hidden";
+
+  isDrawing = true;
+});
+
 canvas.addEventListener("mousedown", () => {
   if (drawType == 3 || drawType == 4) {
     canvas.style.cursor = "crosshair";
@@ -36,7 +103,7 @@ canvas.addEventListener("mousedown", () => {
     const rect = canvas.getBoundingClientRect();
     startX = event.clientX - rect.left;
     startY = event.clientY - rect.top;
-    console.log(startY);
+    // console.log(startY);
   }
   isDrawing = true;
   if (startX > canvas.width - 105 && startY > canvas.height - 105) {
@@ -56,12 +123,25 @@ canvas.addEventListener("mousedown", () => {
   }
 });
 
+canvas.addEventListener("touchend", function (e) {
+  if (isDrawing) {
+    const rect = canvas.getBoundingClientRect();
+    var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+    var touch = evt.touches[0] || evt.changedTouches[0];
+    touchEndX = touch.pageX - rect.left;
+    touchEndY = touch.pageY - rect.top;
+    // console.log(touchEndY);
+  }
+  isDrawing = false;
+  ctx.beginPath();
+});
+
 canvas.addEventListener("mouseup", () => {
   if (isDrawing) {
     const rect = canvas.getBoundingClientRect();
     stopX = event.clientX - rect.left;
     stopY = event.clientY - rect.top;
-    console.log(stopY);
+    // console.log(stopY);
   }
   isDrawing = false;
   ctx.beginPath();
@@ -75,18 +155,18 @@ canvas.addEventListener("mousemove", function (event) {
     if (isDrawing) {
       switch (drawType) {
         case 0:
-          erase();
+          erase(mouseX, mouseY);
           break;
         case 1:
-          lineDraw();
+          lineDraw(mouseX, mouseY);
           break;
         case 3:
           ctx.putImageData(savedState, 0, 0);
-          rectDraw();
+          rectDraw(startX, startY, mouseX, mouseY);
           break;
         case 4:
           ctx.putImageData(savedState, 0, 0);
-          circleDraw();
+          circleDraw(startX, startY, mouseX, mouseY);
           break;
       }
     }
@@ -96,35 +176,35 @@ canvas.addEventListener("mousemove", function (event) {
 colourPallete = new Image();
 colourPallete;
 
-function lineDraw() {
+function lineDraw(x, y) {
   ctx.strokeStyle = colour;
   ctx.lineWidth = 7;
   ctx.lineCap = "round";
-  ctx.lineTo(mouseX, mouseY);
+  ctx.lineTo(x, y);
   ctx.stroke();
 }
-function erase() {
+function erase(x, y) {
   ctx.fillStyle = "white";
   ctx.strokeStyle = "white";
   ctx.beginPath();
-  ctx.arc(mouseX, mouseY, 20, 0, Math.PI * 2, false);
+  ctx.arc(x, y, 20, 0, Math.PI * 2, false);
   ctx.closePath();
   ctx.fill();
 }
-function rectDraw() {
+function rectDraw(sx, sy, x, y) {
   ctx.fillStyle = colour;
 
-  ctx.fillRect(startX, startY, mouseX - startX, mouseY - startY);
+  ctx.fillRect(sx, sy, x - sx, y - sy);
 }
 
-function circleDraw() {
+function circleDraw(sx, sy, mx, my) {
   ctx.fillStyle = colour;
-  x = mouseX - startX;
-  y = mouseY - startY;
+  x = mx - sx;
+  y = my - sy;
   rad = Math.sqrt(x * x + y * y);
   console.log(rad);
   ctx.beginPath();
-  ctx.arc(startX, startY, rad, 0, Math.PI * 2, false);
+  ctx.arc(sx, sy, rad, 0, Math.PI * 2, false);
   ctx.closePath();
   ctx.fill();
 }
