@@ -11,6 +11,7 @@ let startX,
 
 let img = new Image();
 img.src = "color-wheel-12-colors.png";
+let savedState;
 
 function init() {
   (canvas = document.getElementById("myCanvas")),
@@ -27,6 +28,7 @@ init();
 canvas.addEventListener("mousedown", () => {
   if (drawType == 3 || drawType == 4) {
     canvas.style.cursor = "crosshair";
+    savedState = ctx.getImageData(0, 0, canvas.width, canvas.height);
   } else {
     canvas.style.cursor = "default";
   }
@@ -37,7 +39,7 @@ canvas.addEventListener("mousedown", () => {
     console.log(startY);
   }
   isDrawing = true;
-  if (startX > 600 && startY > 500) {
+  if (startX > canvas.width - 105 && startY > canvas.height - 105) {
     rgb = ctx.getImageData(startX, startY, 1, 1).data;
     hex =
       "#" +
@@ -53,6 +55,7 @@ canvas.addEventListener("mousedown", () => {
     ctx.fill();
   }
 });
+
 canvas.addEventListener("mouseup", () => {
   if (isDrawing) {
     const rect = canvas.getBoundingClientRect();
@@ -60,20 +63,15 @@ canvas.addEventListener("mouseup", () => {
     stopY = event.clientY - rect.top;
     console.log(stopY);
   }
-  if (drawType == 3) {
-    rectDraw();
-  }
-  if (drawType == 4) {
-    circleDraw();
-  }
   isDrawing = false;
   ctx.beginPath();
 });
+
 canvas.addEventListener("mousemove", function (event) {
   const rect = canvas.getBoundingClientRect();
   mouseX = event.clientX - rect.left;
   mouseY = event.clientY - rect.top;
-  if (mouseX < 550 || mouseY < 450) {
+  if (mouseX < canvas.width - 130 || mouseY < canvas.height - 130) {
     if (isDrawing) {
       switch (drawType) {
         case 0:
@@ -81,6 +79,14 @@ canvas.addEventListener("mousemove", function (event) {
           break;
         case 1:
           lineDraw();
+          break;
+        case 3:
+          ctx.putImageData(savedState, 0, 0);
+          rectDraw();
+          break;
+        case 4:
+          ctx.putImageData(savedState, 0, 0);
+          circleDraw();
           break;
       }
     }
@@ -108,13 +114,13 @@ function erase() {
 function rectDraw() {
   ctx.fillStyle = colour;
 
-  ctx.fillRect(startX, startY, stopX - startX, stopY - startY);
+  ctx.fillRect(startX, startY, mouseX - startX, mouseY - startY);
 }
 
 function circleDraw() {
   ctx.fillStyle = colour;
-  x = stopX - startX;
-  y = stopY - startY;
+  x = mouseX - startX;
+  y = mouseY - startY;
   rad = Math.sqrt(x * x + y * y);
   console.log(rad);
   ctx.beginPath();
