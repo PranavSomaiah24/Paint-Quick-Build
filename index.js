@@ -25,17 +25,18 @@ function init() {
 init();
 
 canvas.addEventListener("mousedown", () => {
-  if (drawType == 3) {
+  if (drawType == 3 || drawType == 4) {
     canvas.style.cursor = "crosshair";
   } else {
     canvas.style.cursor = "default";
   }
-  if (true) {
+  if (!isDrawing) {
     const rect = canvas.getBoundingClientRect();
     startX = event.clientX - rect.left;
     startY = event.clientY - rect.top;
     console.log(startY);
   }
+  isDrawing = true;
   if (startX > 600 && startY > 500) {
     rgb = ctx.getImageData(startX, startY, 1, 1).data;
     hex =
@@ -51,17 +52,19 @@ canvas.addEventListener("mousedown", () => {
     ctx.closePath();
     ctx.fill();
   }
-  isDrawing = true;
 });
 canvas.addEventListener("mouseup", () => {
   if (isDrawing) {
     const rect = canvas.getBoundingClientRect();
     stopX = event.clientX - rect.left;
     stopY = event.clientY - rect.top;
-    console.log(startY);
+    console.log(stopY);
   }
   if (drawType == 3) {
     rectDraw();
+  }
+  if (drawType == 4) {
+    circleDraw();
   }
   isDrawing = false;
   ctx.beginPath();
@@ -103,17 +106,28 @@ function erase() {
   ctx.fill();
 }
 function rectDraw() {
-  ctx.fillStyle = "colour";
+  ctx.fillStyle = colour;
 
   ctx.fillRect(startX, startY, stopX - startX, stopY - startY);
+}
 
-  //   console.log(startX);
+function circleDraw() {
+  ctx.fillStyle = colour;
+  x = stopX - startX;
+  y = stopY - startY;
+  rad = Math.sqrt(x * x + y * y);
+  console.log(rad);
+  ctx.beginPath();
+  ctx.arc(startX, startY, rad, 0, Math.PI * 2, false);
+  ctx.closePath();
+  ctx.fill();
 }
 
 eraseBtn = document.getElementById("erase");
 lineBtn = document.getElementById("line");
 clearBtn = document.getElementById("clear");
 rectBtn = document.getElementById("rect");
+circleBtn = document.getElementById("circle");
 
 eraseBtn.addEventListener("click", () => {
   drawType = 0;
@@ -127,4 +141,7 @@ clearBtn.addEventListener("click", () => {
 });
 rectBtn.addEventListener("click", () => {
   drawType = 3;
+});
+circleBtn.addEventListener("click", () => {
+  drawType = 4;
 });

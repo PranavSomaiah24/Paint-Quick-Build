@@ -68,6 +68,21 @@ p {
   cursor: pointer;
   position: absolute;
 }
+#circle {
+  top: 80%;
+  left: 5%;
+  padding: 0.5em;
+  width: 15%;
+  border-radius: 0.5em;
+  outline: none;
+  border: none;
+  background-color: purple;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+}
 #erase {
   top: 40%;
   right: 5%;
@@ -84,8 +99,8 @@ p {
   position: absolute;
 }
 #clear {
-  top: 80%;
-  left: 5%;
+  top: 60%;
+  right: 5%;
   padding: 0.5em;
   width: 15%;
   border-radius: 0.5em;
